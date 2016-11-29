@@ -1,3 +1,12 @@
+#https://www.kaggle.com/c/airbnb-recruiting-new-user-bookings
+#
+#Python Model used to predict the classification of a user's next desired country to travel to, 
+#given their activity on Airbnb.
+#
+#Input: train_users_2.csv and test_users.csv provided by Kaggle
+#Output: sub.csv, a csv file that lists the id of each user and a list of probabilities 
+#of the likeliness that the user will travel to a given country.
+
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
