@@ -42,8 +42,8 @@ df_all = df_all.drop(['date_account_created'], axis=1)
 
 #timestamp_first_active
 tfa = np.vstack(df_all.timestamp_first_active.astype(str).apply(
-    lambda x: list(map(int, [x[:4],x[4:6],x[6:8],x[8:10],
-    x[10:12],x[12:14]]))).values)
+    lambda x: list(map(int, [x[:4], x[4:6], x[6:8], x[8:10],
+    x[10:12], x[12:14]]))).values)
 df_all['tfa_year'] = tfa[:,0]
 df_all['tfa_month'] = tfa[:,1]
 df_all['tfa_day'] = tfa[:,2]
@@ -91,7 +91,7 @@ X_test = vals[piv_train:]
 
 xgb = XGBClassifier(max_depth=6,
                     learning_rate=0.2,
-                    n_estimators=25,
+                    n_estimators=30,
                     objective='multi:softprob',
                     subsample=0.5,
                     colsample_bytree=0.5,
