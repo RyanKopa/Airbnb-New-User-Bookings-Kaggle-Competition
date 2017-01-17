@@ -90,11 +90,12 @@ X_test = vals[piv_train:]
 #seed : int    Random number seed.
 
 xgb = XGBClassifier(max_depth=6,
-                    learning_rate=0.2,
+                    learning_rate=0.1,
                     n_estimators=30,
                     objective='multi:softprob',
-                    subsample=0.5,
-                    colsample_bytree=0.5,
+                    subsample=0.8,
+                    colsample_bytree=0.8,
+                    min_child_weight=1,
                     seed=0)
 #fits test values and and encoded labels
 eval_set  = [(X,y)]
