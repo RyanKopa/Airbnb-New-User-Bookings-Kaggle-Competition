@@ -62,6 +62,9 @@ for f in ohe_feats:
     df_all_dummy = pd.get_dummies(df_all[f], prefix=f)
     df_all = df_all.drop([f], axis=1)
     df_all = pd.concat((df_all, df_all_dummy), axis=1)
+#feature selection
+# df_all = df_all.drop()
+
 
 #Splitting train and test
 vals = df_all.values
@@ -100,7 +103,9 @@ xgb = XGBClassifier(max_depth=6,
 #fits test values and and encoded labels
 eval_set  = [(X,y)]
 
-xgb.fit(X, y, eval_set=eval_set, eval_metric = 'mlogloss')
+xgb.fit(X, y,
+    eval_set=eval_set,
+    eval_metric = 'mlogloss')
 #predicts coresponding class labels in the case of classification
 #predicts the probability of a user belonging to a class (country)
 #outputs a numpy array of shape (n_samples, n_classes)
