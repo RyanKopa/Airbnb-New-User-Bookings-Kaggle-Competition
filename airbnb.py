@@ -1,11 +1,14 @@
-#https://www.kaggle.com/c/airbnb-recruiting-new-user-bookings
+# https://www.kaggle.com/c/airbnb-recruiting-new-user-bookings
 #
-#Python Model used to predict the classification of a user's next desired country to travel to,
-#given their activity on Airbnb.
+# Python Model used to predict the classification of a user's next desired country to travel to,
+# given their activity on Airbnb.
 #
-#Input: train_users_2.csv and test_users.csv provided by Kaggle
-#Output: sub.csv, a csv file that lists the id of each user and a list of probabilities
-#of the likeliness that the user will travel to a given country.
+# Input: train_users_2.csv and test_users.csv provided by Kaggle
+# Output: sub.csv, a csv file that lists the id of each user and a list of probabilities
+# of the likeliness that the user will travel to a given country.
+
+# pylint: disable=C0103
+# pylint: disable=E1101
 
 import numpy as np
 import pandas as pd
@@ -34,19 +37,19 @@ df_all = df_all.fillna(-1)
 #stack arrays vertically
 dac = np.vstack(df_all.date_account_created.astype(str).apply(
     lambda x: list(map(int, x.split('-')))).values)
-df_all['dac_year'] = dac[:,0]
-df_all['dac_month'] = dac[:,1]
-df_all['dac_day'] = dac[:,2]
+df_all['dac_year'] = dac[:, 0]
+df_all['dac_month'] = dac[:, 1]
+df_all['dac_day'] = dac[:, 2]
 #remove dat account created
 df_all = df_all.drop(['date_account_created'], axis=1)
 
 #timestamp_first_active
 tfa = np.vstack(df_all.timestamp_first_active.astype(str).apply(
-    lambda x: list(map(int, [x[:4], x[4:6], x[6:8], x[8:10],
+    lambda x: list(map(int, [x[:4], x[4:6], x[6:8], x[8:10], 
     x[10:12], x[12:14]]))).values)
-df_all['tfa_year'] = tfa[:,0]
-df_all['tfa_month'] = tfa[:,1]
-df_all['tfa_day'] = tfa[:,2]
+df_all['tfa_year'] = tfa[:, 0]
+df_all['tfa_month'] = tfa[:, 1]
+df_all['tfa_day'] = tfa[:, 2]
 df_all = df_all.drop(['timestamp_first_active'], axis=1)
 
 #Age
@@ -83,8 +86,8 @@ X_test = vals[piv_train:]
 #n_estimators : int   Number of boosted trees to fit.
 #objective : string   Specify the learning task and the corresponding learning objective.
 
-#objective:  'multi:softprob'  = set XGBoost to do multiclass classification using the softmax objective,
-#			you also need to set number of classes
+#objective:  'multi:softprob'  = set XGBoost to do multiclass classification 
+#           using the softmax objective, you also need to set number of classes
 #			output a vector of ndata * nclass, which can be further reshaped to ndata, nclass matrix.
 #			The result contains predicted probability of each data point belonging to each class.
 
@@ -101,27 +104,24 @@ xgb = XGBClassifier(max_depth=6,
                     min_child_weight=1,
                     seed=0)
 #fits test values and and encoded labels
-eval_set  = [(X,y)]
+eval_set = [(X, y)]
 
-xgb.fit(X, y,
-    eval_set=eval_set,
-    eval_metric = 'mlogloss')
+xgb.fit(X, y, eval_set=eval_set, eval_metric='mlogloss')
 #predicts coresponding class labels in the case of classification
 #predicts the probability of a user belonging to a class (country)
 #outputs a numpy array of shape (n_samples, n_classes)
-y_pred = xgb.predict_proba(X_test)
+Ypred = xgb.predict_proba(X_test)
 
 #Taking the 5 classes with highest probabilities
-ids = []  #list of ids
+IDS = []  #list of ids
 cts = []  #list of countries
 for i in range(len(id_test)):
     idx = id_test[i]
-    ids += [idx] * 5
+    IDS += [idx] * 5
     #Transform array or sparse matrix X back to feature mappings.
     cts += le.inverse_transform(
-        np.argsort(y_pred[i])[::-1])[:5].tolist()
+        np.argsort(Ypred[i])[::-1])[:5].tolist()
 
 #Generate submission
-sub = pd.DataFrame(np.column_stack((ids, cts)), columns=['id',
-                                                        'country'])
-sub.to_csv('sub.csv',index=False)
+SUB = pd.DataFrame(np.column_stack((IDS, cts)), columns=['id', 'country'])
+SUB.to_csv('sub.csv', index=False)
