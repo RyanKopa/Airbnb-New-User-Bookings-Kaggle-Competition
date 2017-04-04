@@ -37,12 +37,6 @@ drop_var_2 = ['id', 'country_destination']
 trainData = trainData.drop(drop_var_2, axis=1)
 validateData = validateData.drop(drop_var_2, axis=1)
 
-# Gets an numpy error
-# trainData.index = range(len(trainData))
-# trainLabels.index = range(len(trainLabels))
-# validateData.index = range(len(validateData))
-# validateLabels.index = range(len(validateLabels))
-
 trainDMatrix = xgb.DMatrix(trainData.as_matrix(),
                            label=trainLabels.astype(int))
 
