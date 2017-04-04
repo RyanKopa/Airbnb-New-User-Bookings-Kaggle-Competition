@@ -8,3 +8,6 @@ Numpy
 Pandas
 XGBoost
 Scikit-learn
+
+Data was provided from Airbnb.  The submitted script for the competition is airbnb.py, which ranked at 409/1462.
+Post competition data exploration led to a rank of 68/1462 using the scripts airbnb-feature-exploration.ipynb and airbnb-predict-v2.py
