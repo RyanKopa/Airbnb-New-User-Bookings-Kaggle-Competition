@@ -44,9 +44,10 @@ df_all['dac_day'] = dac[:, 2]
 df_all = df_all.drop(['date_account_created'], axis=1)
 
 #timestamp_first_active
-tfa = np.vstack(df_all.timestamp_first_active.astype(str).apply(
-    lambda x: list(map(int, [x[:4], x[4:6], x[6:8], x[8:10], 
-    x[10:12], x[12:14]]))).values)
+tfa = np.vstack(df_all.timestamp_first_active.astype(str).apply(lambda x:list(
+                            map(int, [x[:4], x[4:6],
+                             x[6:8], x[8:10],
+                             x[10:12], x[12:14]]))).values)
 df_all['tfa_year'] = tfa[:, 0]
 df_all['tfa_month'] = tfa[:, 1]
 df_all['tfa_day'] = tfa[:, 2]
@@ -54,13 +55,13 @@ df_all = df_all.drop(['timestamp_first_active'], axis=1)
 
 #Age
 av = df_all.age.values
-df_all['age'] = np.where(np.logical_or(av<14, av>100), -1, av)
+df_all['age'] = np.where(np.logical_or(av < 15, av > 85), -1, av)
 
 #One-hot-encoding features
 ohe_feats = ['gender', 'signup_method', 'signup_flow', 'language',
-    'affiliate_channel', 'affiliate_provider',
-    'first_affiliate_tracked', 'signup_app', 'first_device_type',
-    'first_browser']
+             'affiliate_channel', 'affiliate_provider',
+             'first_affiliate_tracked', 'signup_app', 'first_device_type',
+             'first_browser']
 for f in ohe_feats:
     df_all_dummy = pd.get_dummies(df_all[f], prefix=f)
     df_all = df_all.drop([f], axis=1)
@@ -86,7 +87,7 @@ X_test = vals[piv_train:]
 #n_estimators : int   Number of boosted trees to fit.
 #objective : string   Specify the learning task and the corresponding learning objective.
 
-#objective:  'multi:softprob'  = set XGBoost to do multiclass classification 
+#objective:  'multi:softprob'  = set XGBoost to do multiclass classification
 #           using the softmax objective, you also need to set number of classes
 #			output a vector of ndata * nclass, which can be further reshaped to ndata, nclass matrix.
 #			The result contains predicted probability of each data point belonging to each class.
