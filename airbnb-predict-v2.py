@@ -47,6 +47,30 @@ def getScore(pred,ans):
             ndcg += 1/np.log2(position+2)
     return ndcg/len(ans)
 
+## Training Classifier for parameter tuning
+
+# start_time = time.time()
+# watchlist = [(validateDMatrix,'eval'), (trainDMatrix,'train')]
+
+# params = {
+#           'learning_rate' : 0.038, 
+#           'colsample_bytree' : 0.6, 
+#           'subsample' : 0.65, 
+#           'max_depth' : 7, 
+#           'num_class' : len(np.unique(trainLabels)),
+#           'seed' : 0,
+#           'objective' : 'multi:softprob',
+#           'eval_metric' : 'mlogloss',
+#           'booster' : 'gbtree'
+#           }
+
+# clf = xgb.train(params, trainDMatrix, 330, evals=watchlist,
+#                 early_stopping_rounds=10, verbose_eval=True)
+ 
+# print((time.time() - start_time)/60)
+# validate_label_predictions = clf.predict(validateDMatrix)
+# print(getScore(validate_label_predictions, validateLabels))
+  
 trainTotal = xgb.DMatrix(df_train.drop(drop_var_2, axis=1), labels)
 testingData = xgb.DMatrix(df_test[df_train.drop(drop_var_2, axis=1).columns])
 
