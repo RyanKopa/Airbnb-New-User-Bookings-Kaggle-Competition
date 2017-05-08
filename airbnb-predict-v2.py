@@ -50,7 +50,7 @@ def getScore(pred,ans):
 ## Training Classifier for parameter tuning
 
 # start_time = time.time()
-# watchlist = [(validateDMatrix,'eval'), (trainDMatrix,'train')]
+# watchlist = [(validateDMatrix, 'eval'), (trainDMatrix, 'train')]
 
 # params = {
 #           'learning_rate' : 0.038, 
