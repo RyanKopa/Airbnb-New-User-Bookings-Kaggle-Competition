@@ -15,14 +15,16 @@ labels = le.fit_transform(labels)
 id_test = df_test['id']
 piv_train = df_train.shape[0]
 
+#Drop columns that are not useful for model
 drop_var = ['most_used_device']
 
 df_train = df_train.drop(drop_var, axis=1)
 df_test = df_test.drop(drop_var, axis=1)
 
+#Train/Test split
 trainData, validateData = train_test_split(df_train, test_size=0.1,
                                            random_state=42)
-
+#Feature Encoding (categorical variables)
 le = LabelEncoder()
 trainLabels = le.fit_transform(trainData['country_destination'].values)
 validateLabels = le.fit_transform(validateData['country_destination'].values)
@@ -38,7 +40,7 @@ validateDMatrix = xgb.DMatrix(validateData.as_matrix(),
                               label=validateLabels.astype(int))
 
 def getScore(pred,ans):
-    #ndcg@5 score calculator
+    #ndcg@5 score calculator, used for evaluating models.
     ndcg = 0
     for n in range(len(ans)):
         position = [i[0] for i in sorted(enumerate(pred[n]),
